@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { Plugins, GeolocationPosition } from '@capacitor/core';
+import { ToastController } from '@ionic/angular';
+
+const { Geolocation } = Plugins;
 
 @Component({
   selector: 'app-home',
@@ -7,4 +11,20 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
+  constructor(public toastController: ToastController) {}
+
+  async getCurrentPosition() {
+    const coordinates = await Geolocation.getCurrentPosition();
+    console.log('Current', coordinates);
+  }
+
+  async presentToastWithOptions(coordinates: GeolocationPosition) {
+    const toast = await this.toastController.create({
+      message: 'coordinates: \n' + 'latitude: ' + coordinates.coords.latitude + '\nlongitude: ' + coordinates.coords.longitude,
+      showCloseButton: true,
+      position: 'top',
+      closeButtonText: 'Done'
+    });
+    toast.present();
+  }
 }

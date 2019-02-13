@@ -1,0 +1,6 @@
+{
+  "appId": "com.example.mycapapp",
+  "appName": "myCapApp",
+  "bundledWebRuntime": false,
+  "webDir": "www"
+}

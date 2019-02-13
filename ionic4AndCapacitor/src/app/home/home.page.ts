@@ -15,10 +15,10 @@ export class HomePage {
 
   async getCurrentPosition() {
     const coordinates = await Geolocation.getCurrentPosition();
-    console.log('Current', coordinates);
+    this.presentToastWithOptions(coordinates);
   }
 
-  async presentToastWithOptions(coordinates: GeolocationPosition) {
+  private async presentToastWithOptions(coordinates: GeolocationPosition) {
     const toast = await this.toastController.create({
       message: 'coordinates: \n' + 'latitude: ' + coordinates.coords.latitude + '\nlongitude: ' + coordinates.coords.longitude,
       showCloseButton: true,

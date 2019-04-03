@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { Plugins, GeolocationPosition } from '@capacitor/core';
+import { Plugins, GeolocationPosition, CameraResultType, CameraSource } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
-const { Geolocation } = Plugins;
+const { Geolocation, Camera } = Plugins;
 
 @Component({
   selector: 'app-home',
@@ -11,11 +12,24 @@ const { Geolocation } = Plugins;
 })
 export class HomePage {
 
-  constructor(public toastController: ToastController) {}
+  image: SafeResourceUrl;
+
+  constructor(public toastController: ToastController, private domSanitizer: DomSanitizer) {}
 
   async getCurrentPosition() {
     const coordinates = await Geolocation.getCurrentPosition();
     this.presentToastWithOptions(coordinates);
+  }
+
+  async takePicture() {
+    const result = await Camera.getPhoto({
+      quality: 75,
+      allowEditing: true,
+      source: CameraSource.Camera,
+      resultType: CameraResultType.Base64
+    });
+
+    this.image = this.domSanitizer.bypassSecurityTrustResourceUrl(result && result.base64Data);
   }
 
   private async presentToastWithOptions(coordinates: GeolocationPosition) {
@@ -27,4 +41,6 @@ export class HomePage {
     });
     toast.present();
   }
+
+
 }
